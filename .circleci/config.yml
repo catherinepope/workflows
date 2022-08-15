@@ -1,35 +1,35 @@
 version: 2.1
 jobs:
+  build_approval:
+    docker:
+      - image: alpine:3.15
+    steps:
+      - run:
+          name: The is the build approval
+          command: echo 'Do you approve?'
   build:
     docker:
       - image: alpine:3.15
     steps:
       - run:
-          name: The is the first job
-          command: echo 'Hello World!'
-  test1:
-    docker:
-      - image: alpine:3.15
-    steps:
-      - run:
-          name: The is the first test
-          command: echo 'Test 1'
+          name: The is the build
+          command: echo 'Under construction'
             
-  test2:
+  upload_artifacts:
     docker:
       - image: alpine:3.15
     steps:
       - run:
-          name: The is the second test
-          command: echo 'Test 2'
+          name: Uploading artifacts
+          command: echo 'Up, up, and away!'
 
-  hold:
+  hold_for_deploy:
     docker:
       - image: alpine:3.15
     steps:
       - run:
-          name: On Hold
-          command: echo 'Hold your horses'
+          name: On Hold Again
+          command: echo 'How is it looking?'
 
   deploy:
     docker:
@@ -43,17 +43,18 @@ jobs:
 workflows:
   build-test-and-approval-deploy:
     jobs:
-      - build
-      - test1:
+      - build_approval:
+          type: approval
+      - build:
+          requires:
+            - build_approval
+      - upload_artifacts: 
           requires:
             - build
-      - test2: 
-          requires:
-            - test1
-      - hold:
+      - hold_for_deploy:
           type: approval
           requires:
-           - test2
+           - build
       - deploy:
           requires:
-            - hold
+            - hold_for_deploy
