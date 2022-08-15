@@ -50,7 +50,7 @@ workflows:
             - build_approval
       - upload_artifacts: 
           requires:
-            - build
+            - build_approval
       - hold_for_deploy:
           type: approval
           requires:
