@@ -23,6 +23,14 @@ jobs:
           name: The is the second test
           command: echo 'Test 2'
 
+  hold:
+    docker:
+      - image: alpine:3.15
+    steps:
+      - run:
+          name: On Hold
+          command: echo 'Hold your horses'
+
   deploy:
     docker:
       - image: alpine:3.15
@@ -43,6 +51,8 @@ workflows:
           requires:
             - test1
       - hold:
+          type: approval
+          requires:
            - test2
       - deploy:
           requires:
