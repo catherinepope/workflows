@@ -11,9 +11,9 @@ jobs:
     docker:
       - image: alpine:3.15
     steps:
-     - run:
-         name: The is the first test
-         command: echo 'Test 1'
+      - run:
+          name: The is the first test
+          command: echo 'Test 1'
             
   test2:
     docker:
