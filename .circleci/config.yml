@@ -1,60 +1,38 @@
 version: 2.1
+
 jobs:
-  build_approval:
-    docker:
-      - image: alpine:3.15
-    steps:
-      - run:
-          name: The is the build approval
-          command: echo 'Do you approve?'
+  
   build:
     docker:
-      - image: alpine:3.15
+      - image: cimg/base:2021.04
     steps:
       - run:
-          name: The is the build
+          name: The is the build job
           command: echo 'Under construction'
+  
+  test:
+    docker:
+      - image: cimg/node:18.7.0
+    steps:
+      - run:
+          name: The is the test job
+          command: echo 'Testing, testing'
             
-  upload_artifacts:
-    docker:
-      - image: alpine:3.15
-    steps:
-      - run:
-          name: Uploading artifacts
-          command: echo 'Up, up, and away!'
-
-  hold_for_deploy:
-    docker:
-      - image: alpine:3.15
-    steps:
-      - run:
-          name: On Hold Again
-          command: echo 'How is it looking?'
-
   deploy:
     docker:
-      - image: alpine:3.15
+      - image: cimg/aws:2022.06
     steps:
       - run:
-          name: This is the deployment
-          command: echo 'We have lift-off!'
-      
+          name: This is the deploy job
+          command: echo 'We have lift-off!'   
 
 workflows:
-  build-test-and-approval-deploy:
+  build-test-deploy:
     jobs:
-      - build_approval:
-          type: approval
-      - build:
-          requires:
-            - build_approval
-      - upload_artifacts: 
+      - build
+      - test: 
           requires:
             - build
-      - hold_for_deploy:
-          type: approval
-          requires:
-           - build
       - deploy:
           requires:
-            - hold_for_deploy
+            - test
