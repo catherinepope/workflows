@@ -3,6 +3,7 @@ version: 2.1
 jobs:
   
   build:
+    circleci_ip_ranges: true
     docker:
       - image: cimg/base:2021.04
     steps:
